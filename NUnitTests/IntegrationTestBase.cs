@@ -15,7 +15,7 @@ namespace NUnitTests
     ///     a unit test for a class which requires an active Dispatcher
     ///     on an STA thread.
     /// </summary>
-    public abstract class TestWithActiveDispatcher
+    public abstract class IntegrationTestBase
     {
         const string WORKER_THREAD_NAME = "TestRunner";
 

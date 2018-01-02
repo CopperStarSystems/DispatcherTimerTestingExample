@@ -12,11 +12,11 @@ namespace NUnitTests
     /// is supposed to over a certain period of time.
     /// </summary>
 	[TestFixture]
-    public class TickerTest : TestWithActiveDispatcher
+    public class TickerTest : IntegrationTestBase
     {
         #region Data
 
-        Ticker _ticker;
+        Ticker systemUnderTest;
         TickerSettings _settings;
 
         #endregion // Data
@@ -48,12 +48,12 @@ namespace NUnitTests
 		[Test]
 		public void TickerHonorsIntervalAndNumberOfTicks()
 		{
-			_ticker = null;  
+			systemUnderTest = null;  
 		    
 			base.BeginExecuteTest();
 
-			Assert.IsNotNull(_ticker, "_ticker should have been assigned a value.");
-			Assert.AreEqual(3, _ticker.Ticks);
+			Assert.IsNotNull(systemUnderTest, "systemUnderTest should have been assigned a value.");
+			Assert.AreEqual(3, systemUnderTest.Ticks);
 		}
 
 		#endregion // TickerHonorsIntervalAndNumberOfTicks
@@ -69,10 +69,10 @@ namespace NUnitTests
 			// thread.  Creating the Ticker on the worker thread
 			// ensures that its DispatcherTimer uses the worker
 			// thread's Dispatcher.
-			_ticker = new Ticker(_settings);
+			systemUnderTest = new Ticker(_settings);
 
 			// Tell the Ticker to start ticking.
-			_ticker.Start();
+			systemUnderTest.Start();
 
 			// Give the Ticker some time to do its work.
 			TimeSpan waitTime = this.CalculateWaitTime();

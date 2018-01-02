@@ -62,9 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DispatcherHelper.cs" />
-    <Compile Include="NoArgDelegate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestWithActiveDispatcher.cs" />
+    <Compile Include="IntegrationTestBase.cs" />
     <Compile Include="TickerTest.cs" />
   </ItemGroup>
   <ItemGroup>

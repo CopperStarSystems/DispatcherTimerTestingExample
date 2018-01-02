@@ -1,27 +1,31 @@
-﻿using System.Windows.Threading;
+﻿//  --------------------------------------------------------------------------------------
+// NUnitTests.DispatcherHelper.cs
+// 2007/07/14
+//  --------------------------------------------------------------------------------------
+
+using System.Windows.Threading;
 
 namespace NUnitTests
 {
     // The code in this class came from Sheva's TechSpace.
     // URL: http://shevaspace.spaces.live.com/blog/cns!FD9A0F1F8DD06954!411.entry
-    static class DispatcherHelper
+    internal static class DispatcherHelper
     {
-        private static DispatcherOperationCallback exitFrameCallback = new
-           DispatcherOperationCallback(ExitFrame);
+        static readonly DispatcherOperationCallback exitFrameCallback = ExitFrame;
 
         /// <summary>
-        /// Processes all UI messages currently in the message queue.
+        ///     Processes all UI messages currently in the message queue.
         /// </summary>
         public static void DoEvents()
         {
             // Create new nested message pump.
-            DispatcherFrame nestedFrame = new DispatcherFrame();
+            var nestedFrame = new DispatcherFrame();
 
             // Dispatch a callback to the current message queue, when getting called, 
             // this callback will end the nested message loop.
             // note that the priority of this callback should be lower than the that of UI event messages.
-            DispatcherOperation exitOperation = Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Background, exitFrameCallback, nestedFrame);
+            var exitOperation =
+                Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, exitFrameCallback, nestedFrame);
 
             // pump the nested message loop, the nested message loop will immediately 
             // process the messages left inside the message queue.
@@ -29,17 +33,14 @@ namespace NUnitTests
 
             // If the "exitFrame" callback doesn't get finished, Abort it.
             if (exitOperation.Status != DispatcherOperationStatus.Completed)
-            {
                 exitOperation.Abort();
-            }
         }
 
-        private static object ExitFrame(object state)
+        static object ExitFrame(object state)
         {
-            DispatcherFrame frame = state as DispatcherFrame;
-
             // Exit the nested message loop.
-            frame.Continue = false;
+            if (state is DispatcherFrame frame)
+                frame.Continue = false;
             return null;
         }
     }
